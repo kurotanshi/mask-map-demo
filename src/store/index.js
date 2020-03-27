@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   strict: true,
   state: {
-    currCity: '台北市',
+    currCity: '臺北市',
     currDistrict: '北投區',
     infoBoxSid: null,
     keywords: '',
@@ -56,7 +56,7 @@ export default new Vuex.Store({
 
       return state.keywords
         ? stores.filter((d) => d.name.includes(state.keywords)).slice(0, 30)
-        : stores.filter((d) => d.town === state.currDistrict);
+        : stores.filter((d) => d.county === state.currCity && d.town === state.currDistrict);
     },
   },
   actions: {
