@@ -74,7 +74,7 @@ export default {
       return this.$store.state.stores.filter((d) => d.id === this.infoBoxSid)[0];
     },
     servicePeriods() {
-      let servicePeriods = this?.currStore?.['service_periods'] || '';
+      let servicePeriods = this?.currStore?.service_periods || '';
       servicePeriods = servicePeriods.replace(/N/g, 'O').replace(/Y/g, 'X');
 
       return servicePeriods
