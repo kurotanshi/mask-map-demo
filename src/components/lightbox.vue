@@ -2,12 +2,9 @@
   <transition name="modal">
     <div class="modal-mask" v-show="showModal">
       <div class="modal-wrapper" @click.self="close">
-
         <div class="modal-container">
-          <div class="modal-body" v-if="currStore">
-
+          <div class="modal-body" v-if="currStore">  
             <h1 class="store-name">{{ currStore.name }}</h1>
-
             <hr>
             <h2 class="title">營業時間</h2>
             <table>
@@ -39,12 +36,11 @@
               </tbody>
             </table>
 
-            <h2 class="title">{{ currStore.address }}</h2>
-            <h2 class="title">{{ currStore.phone }}</h2>
+            <h2 class="title">地址: {{ currStore.address }}</h2>
+            <h2 class="title">電話: {{ currStore.phone }}</h2>
             <h2 v-if="currStore.custom_note" class="title">備註: {{ currStore.custom_note }}</h2>
           </div>
         </div>
-
       </div>
     </div>
   </transition>
@@ -74,11 +70,13 @@ export default {
       return this.$store.state.stores.filter((d) => d.id === this.infoBoxSid)[0];
     },
     servicePeriods() {
-      let servicePeriods = this?.currStore?.service_periods || '';
+      let servicePeriods = this?.currStore?.['service_periods'] || '';
       servicePeriods = servicePeriods.replace(/N/g, 'O').replace(/Y/g, 'X');
-
+      
       return servicePeriods
-        ? [servicePeriods.slice(0, 7).split(''), servicePeriods.slice(7, 14).split(''), servicePeriods.slice(14, 21).split('')]
+        ? [servicePeriods.slice(0, 7).split(''), 
+          servicePeriods.slice(7, 14).split(''), 
+          servicePeriods.slice(14, 21).split('')]
         : servicePeriods;
     },
   },
@@ -102,12 +100,10 @@ export default {
   display: table;
   transition: opacity .3s ease;
 }
-
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
 }
-
 .modal-container {
   width: 520px;
   margin: 0px auto;
@@ -118,7 +114,6 @@ export default {
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
-
 .modal-body {
   color: #42b983;
   margin: 20px 0;
@@ -129,11 +124,9 @@ export default {
 .modal-enter {
   opacity: 0;
 }
-
 .modal-leave-active {
   opacity: 0;
 }
-
 .modal-enter .modal-container,
 .modal-leave-active .modal-container {
   transform: scale(1.1);
@@ -146,25 +139,21 @@ export default {
   font-weight: bold;
   line-height: 1.5;
 }
-
 .title{
   font-weight: 500;
   margin-bottom: .5rem;
   line-height: 1.7;
 }
-
 table {
   border-spacing: 0;
   border-radius: 3px;
   width: 100%;
   margin-bottom: 1rem;
 }
-
 th{
   background-color: #42b983;
   color: #fff;
 }
-
 td, th{
   padding: .3em;
   text-align: center;
