@@ -29,16 +29,6 @@ export default {
     mapStore.fetchLocations();
     mapStore.fetchPharmacies();
   }
-  // methods: {
-  //   ...mapActions(['fetchLocations', 'fetchPharmacies']),
-  //   openPopup(id) {
-  //     this.$refs.map.triggerPopup(id);
-  //   },
-  // },
-  // mounted () {
-  //   this.fetchLocations();
-  //   this.fetchPharmacies();
-  // }
 }
 </script>
 

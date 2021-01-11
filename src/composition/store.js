@@ -10,9 +10,15 @@ const state = reactive({
   location: [],
   stores: [],
   // 對應原本的 getters
-  cityList: computed(() => state.location.map((d) => d.name)),
-  districtList: computed(() => state.location.find((d) => d.name === state.currCity)?.districts || []),
-  currDistrictInfo: computed(() => state.districtList.find((d) => d.name === state.currDistrict) || {}),
+  cityList: computed(() => {
+    return state.location.map((d) => d.name);
+  }),
+  districtList: computed(() => {
+    return state.location.find((d) => d.name === state.currCity)?.districts || [];
+  }),
+  currDistrictInfo: computed(() => {
+    return state.districtList.find((d) => d.name === state.currDistrict) || {};
+  }),
   filteredStores: computed(() => {
     return state.keywords
       ? state.stores.filter((d) => d.name.includes(state.keywords)).slice(0, 30)

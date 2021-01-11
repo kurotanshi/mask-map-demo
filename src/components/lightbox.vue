@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { inject, computed, toRefs, watchEffect } from "vue";
+import { inject, computed, toRefs } from "vue";
 
 export default {
   name: 'Lightbox',

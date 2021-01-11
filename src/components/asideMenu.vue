@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { toRefs, inject } from "vue";
+import { toRefs, inject, watch } from "vue";
 
 export default {
   name: "asideMenu",
@@ -89,6 +89,11 @@ export default {
       state.showModal = true;
       state.infoBoxSid = sid;
     }
+
+    watch(() => (state.districtList), v => {
+      const [arr] = v;
+      state.currDistrict = arr.name;
+    });
 
     return {
       ...toRefs(state),
