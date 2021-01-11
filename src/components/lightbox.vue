@@ -3,7 +3,7 @@
     <div class="modal-mask" v-show="showModal">
       <div class="modal-wrapper" @click.self="close">
         <div class="modal-container">
-          <div class="modal-body" v-if="currStore">  
+          <div class="modal-body" v-if="currStore">
             <h1 class="store-name">{{ currStore.name }}</h1>
             <hr>
             <h2 class="title">營業時間</h2>
@@ -47,44 +47,35 @@
 </template>
 
 <script>
+import { inject, computed, toRefs, watchEffect } from "vue";
+
 export default {
   name: 'Lightbox',
-  computed: {
-    showModal: {
-      get() {
-        return this.$store.state.showModal;
-      },
-      set(value) {
-        this.$store.commit('setshowModal', value);
-      },
-    },
-    infoBoxSid: {
-      get() {
-        return this.$store.state.infoBoxSid;
-      },
-      set(value) {
-        this.$store.commit('setInfoBoxSid', value);
-      },
-    },
-    currStore() {
-      return this.$store.state.stores.filter((d) => d.id === this.infoBoxSid)[0];
-    },
-    servicePeriods() {
-      let servicePeriods = this?.currStore?.['service_periods'] || '';
+  setup () {
+    const mapStore = inject('mapStore');
+    const { state } = mapStore;
+
+    const currStore = computed(() => state.stores.filter((d) => d.id === state.infoBoxSid)[0]);
+    const servicePeriods = computed(() => {
+      let servicePeriods = currStore.value?.['service_periods'] || '';
       servicePeriods = servicePeriods.replace(/N/g, 'O').replace(/Y/g, 'X');
-      
+
       return servicePeriods
-        ? [servicePeriods.slice(0, 7).split(''), 
-          servicePeriods.slice(7, 14).split(''), 
-          servicePeriods.slice(14, 21).split('')]
+        ? [servicePeriods.slice(0, 7).split(''),
+            servicePeriods.slice(7, 14).split(''),
+            servicePeriods.slice(14, 21).split('')]
         : servicePeriods;
-    },
-  },
-  methods: {
-    close() {
-      this.showModal = false;
-    },
-  },
+    });
+
+    const close = () => { state.showModal = false };
+
+    return {
+      ...toRefs(state),
+      currStore,
+      servicePeriods,
+      close
+    }
+  }
 };
 </script>
 
