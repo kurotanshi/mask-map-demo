@@ -1,7 +1,7 @@
 import { reactive, computed, readonly } from 'vue';
 
 // 對應原本的 state
-const state = reactive({
+const stateRef = reactive({
   currCity: '臺北市',
   currDistrict: '北投區',
   infoBoxSid: null,
@@ -11,29 +11,29 @@ const state = reactive({
   stores: [],
   // 對應原本的 getters
   cityList: computed(() => {
-    return state.location.map((d) => d.name);
+    return stateRef.location.map((d) => d.name);
   }),
   districtList: computed(() => {
-    return state.location.find((d) => d.name === state.currCity)?.districts || [];
+    return stateRef.location.find((d) => d.name === stateRef.currCity)?.districts || [];
   }),
   currDistrictInfo: computed(() => {
-    return state.districtList.find((d) => d.name === state.currDistrict) || {};
+    return stateRef.districtList.find((d) => d.name === stateRef.currDistrict) || {};
   }),
   filteredStores: computed(() => {
-    return state.keywords
-      ? state.stores.filter((d) => d.name.includes(state.keywords)).slice(0, 30)
-      : state.stores.filter((d) => d.county === state.currCity && d.town === state.currDistrict);
+    return stateRef.keywords
+      ? stateRef.stores.filter((d) => d.name.includes(stateRef.keywords)).slice(0, 30)
+      : stateRef.stores.filter((d) => d.county === stateRef.currCity && d.town === stateRef.currDistrict);
   })
 });
 
 // 對應原本的 mutations
-const setCurrCity = (val) => { state.currCity = val };
-const setCurrDistrict = (val) => { state.currDistrict = val };
-const setInfoBoxSid = (val) => { state.infoBoxSid = val };
-const setKeywords = (val) => { state.keywords = val };
-const setShowModal = (val) => { state.showModal = val };
-const setLocation = (val) => { state.location = val };
-const setStores = (val) => { state.stores = val };
+const setCurrCity = (val) => { stateRef.currCity = val };
+const setCurrDistrict = (val) => { stateRef.currDistrict = val };
+const setInfoBoxSid = (val) => { stateRef.infoBoxSid = val };
+const setKeywords = (val) => { stateRef.keywords = val };
+const setShowModal = (val) => { stateRef.showModal = val };
+const setLocation = (val) => { stateRef.location = val };
+const setStores = (val) => { stateRef.stores = val };
 
 // 對應原本的 actions
 const fetchLocations = async () => {
@@ -41,7 +41,7 @@ const fetchLocations = async () => {
   const json = await fetch('https://raw.githubusercontent.com/kurotanshi/mask-map/master/raw/area-location.json')
     .then((res) => res.json());
 
-    state.location = json;
+    setLocation(json);
 };
 
 const fetchPharmacies = async () => {
@@ -55,11 +55,11 @@ const fetchPharmacies = async () => {
     longitude: d.geometry.coordinates[1],
   }));
 
-  state.stores = data;
+  setStores(data);
 };
 
 export default {
-  state, //: readonly(state),
+  state: readonly(stateRef),
   setCurrCity,
   setCurrDistrict,
   setInfoBoxSid,
