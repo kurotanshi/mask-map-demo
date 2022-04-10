@@ -1,9 +1,18 @@
 <template>
   <transition name="modal">
-    <div class="modal-mask" v-show="showModal">
-      <div class="modal-wrapper" @click.self="close">
+    <div
+      class="modal-mask"
+      v-show="showModal"
+    >
+      <div
+        class="modal-wrapper"
+        @click.self="close"
+      >
         <div class="modal-container">
-          <div class="modal-body" v-if="currStore">  
+          <div
+            class="modal-body"
+            v-if="currStore"
+          >
             <h1 class="store-name">{{ currStore.name }}</h1>
             <hr>
             <h2 class="title">營業時間</h2>
@@ -23,22 +32,34 @@
               <tbody>
                 <tr>
                   <th>早上</th>
-                  <td v-for="(s, idx) in servicePeriods[0]" :key="idx">{{s}}</td>
+                  <td
+                    v-for="(s, idx) in servicePeriods[0]"
+                    :key="idx"
+                  >{{s}}</td>
                 </tr>
                 <tr>
                   <th>中午</th>
-                  <td v-for="(s, idx) in servicePeriods[1]" :key="idx">{{s}}</td>
+                  <td
+                    v-for="(s, idx) in servicePeriods[1]"
+                    :key="idx"
+                  >{{s}}</td>
                 </tr>
                 <tr>
                   <th>晚上</th>
-                  <td v-for="(s, idx) in servicePeriods[2]" :key="idx">{{s}}</td>
+                  <td
+                    v-for="(s, idx) in servicePeriods[2]"
+                    :key="idx"
+                  >{{s}}</td>
                 </tr>
               </tbody>
             </table>
 
             <h2 class="title">地址: {{ currStore.address }}</h2>
             <h2 class="title">電話: {{ currStore.phone }}</h2>
-            <h2 v-if="currStore.custom_note" class="title">備註: {{ currStore.custom_note }}</h2>
+            <h2
+              v-if="currStore.custom_note"
+              class="title"
+            >備註: {{ currStore.custom_note }}</h2>
           </div>
         </div>
       </div>
@@ -47,43 +68,40 @@
 </template>
 
 <script>
+import { inject, computed, toRefs } from "vue";
+
 export default {
-  name: 'Lightbox',
-  computed: {
-    showModal: {
-      get() {
-        return this.$store.state.showModal;
-      },
-      set(value) {
-        this.$store.commit('setshowModal', value);
-      },
-    },
-    infoBoxSid: {
-      get() {
-        return this.$store.state.infoBoxSid;
-      },
-      set(value) {
-        this.$store.commit('setInfoBoxSid', value);
-      },
-    },
-    currStore() {
-      return this.$store.state.stores.filter((d) => d.id === this.infoBoxSid)[0];
-    },
-    servicePeriods() {
-      let servicePeriods = this?.currStore?.['service_periods'] || '';
-      servicePeriods = servicePeriods.replace(/N/g, 'O').replace(/Y/g, 'X');
-      
+  name: "Lightbox",
+  setup() {
+    const mapStore = inject("mapStore");
+    const { state, setShowModal } = mapStore;
+
+    const currStore = computed(
+      () => state.stores.filter((d) => d.id === state.infoBoxSid)[0]
+    );
+    const servicePeriods = computed(() => {
+      let servicePeriods = currStore.value?.["service_periods"] || "";
+      servicePeriods = servicePeriods.replace(/N/g, "O").replace(/Y/g, "X");
+
       return servicePeriods
-        ? [servicePeriods.slice(0, 7).split(''), 
-          servicePeriods.slice(7, 14).split(''), 
-          servicePeriods.slice(14, 21).split('')]
+        ? [
+            servicePeriods.slice(0, 7).split(""),
+            servicePeriods.slice(7, 14).split(""),
+            servicePeriods.slice(14, 21).split(""),
+          ]
         : servicePeriods;
-    },
-  },
-  methods: {
-    close() {
-      this.showModal = false;
-    },
+    });
+
+    const close = () => {
+      setShowModal(false);
+    };
+
+    return {
+      ...toRefs(state),
+      currStore,
+      servicePeriods,
+      close,
+    };
   },
 };
 </script>
@@ -96,9 +114,9 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .65);
+  background-color: rgba(0, 0, 0, 0.65);
   display: table;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
 }
 .modal-wrapper {
   display: table-cell;
@@ -110,8 +128,8 @@ export default {
   padding: 10px 30px;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
-  transition: all .3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
 .modal-body {
@@ -139,9 +157,9 @@ export default {
   font-weight: bold;
   line-height: 1.5;
 }
-.title{
+.title {
   font-weight: 500;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   line-height: 1.7;
 }
 table {
@@ -150,12 +168,13 @@ table {
   width: 100%;
   margin-bottom: 1rem;
 }
-th{
+th {
   background-color: #42b983;
   color: #fff;
 }
-td, th{
-  padding: .3em;
+td,
+th {
+  padding: 0.3em;
   text-align: center;
   line-height: 1.5rem;
 }
